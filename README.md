@@ -4,14 +4,20 @@ A lightweight authentication system using Google OAuth 2.0, built with React and
 
 ## Screenshots
 
-![Login Screen](./image/1.png)
-*Login Screen*
+<p align="center">
+  <img src="./image/1.png" alt="Login Screen"><br>
+  <em>Login Screen</em>
+</p>
 
-![Authentication Process](./image/2.png)
-*Authentication Process*
+<p align="center">
+  <img src="./image/2.png" alt="Authentication Process"><br>
+  <em>Authentication Process</em>
+</p>
 
-![Dashboard View](./image/3.png)
-*Dashboard View*
+<p align="center">
+  <img src="./image/3.png" alt="Dashboard View"><br>
+  <em>Dashboard View</em>
+</p>
 
 ## Features
 
