@@ -2,6 +2,17 @@
 
 A lightweight authentication system using Google OAuth 2.0, built with React and Node.js. This project demonstrates secure user authentication using Google Sign-In, with a React frontend and Express.js backend.
 
+## Screenshots
+
+![Login Screen](./image/1.png)
+*Login Screen*
+
+![Authentication Process](./image/2.png)
+*Authentication Process*
+
+![Dashboard View](./image/3.png)
+*Dashboard View*
+
 ## Features
 
 - 🔐 Google OAuth 2.0 Authentication

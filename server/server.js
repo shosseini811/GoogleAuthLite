@@ -30,8 +30,9 @@ async function verifyGoogleToken(token) {
 // Google authentication endpoint
 app.post('/api/auth/google', async (req, res) => {
   const { token } = req.body;
-  
+  console.log("token", token);
   const payload = await verifyGoogleToken(token);
+  console.log("payload", payload);
   if (!payload) {
     return res.status(400).json({ error: 'Invalid token' });
   }

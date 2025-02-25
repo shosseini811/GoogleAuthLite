@@ -4,9 +4,9 @@ import axios from 'axios';
 
 const App = () => {
   // Debug all relevant environment variables
-  console.log('%c Google OAuth Debug Info ', 'background: #333; color: #fff');
-  console.log('Client ID:', process.env.REACT_APP_GOOGLE_CLIENT_ID);
-  console.log('Environment:', process.env.NODE_ENV);
+  // console.log('%c Google OAuth Debug Info ', 'background: #333; color: #fff');
+  // console.log('Client ID:', process.env.REACT_APP_GOOGLE_CLIENT_ID);
+  console.log('Environment:', process.env.NODE_ENV); // 'Environment the App is running in'
   
   // Add error handler for Google OAuth
   window.addEventListener('error', (event) => {
@@ -26,9 +26,11 @@ const App = () => {
 
   const fetchUserProfile = async (token) => {
     try {
+      console.log("Fetching user profile with token:", token);
       const response = await axios.get('http://localhost:5001/api/user/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log("Profile response:", response.data);
       setUser(response.data.user);
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -38,11 +40,14 @@ const App = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
+      console.log("credentialResponse", credentialResponse);
       const response = await axios.post('http://localhost:5001/api/auth/google', {
         token: credentialResponse.credential
       });
-      
+      console.log("response", response.data);
       const { token, user } = response.data;
+      console.log("User data:", user);
+      console.log("Profile picture URL:", user.picture);
       localStorage.setItem('token', token);
       setUser(user);
     } catch (error) {
@@ -67,7 +72,7 @@ const App = () => {
               Client ID: {process.env.REACT_APP_GOOGLE_CLIENT_ID || 'NOT_FOUND'}
             </div>
             <GoogleLogin
-              onSuccess={handleGoogleSuccess}
+              onSuccess={handleGoogleSuccess} // After successful authentication, Google sends back an ID token (or other credentials) as part of the OAuth response.
               onError={() => console.log('Login Failed')}
               useOneTap
             />
@@ -75,7 +80,22 @@ const App = () => {
         </div>
       ) : (
         <div style={styles.profileContainer}>
-          <img src={user.picture} alt="profile" style={styles.profilePic} />
+          {user.picture ? (
+            <img 
+              src={user.picture} 
+              alt="profile" 
+              style={styles.profilePic}
+              onError={(e) => {
+                console.error("Error loading profile image:", e);
+                e.target.onerror = null;
+                e.target.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.name) + "&background=random";
+              }}
+            />
+          ) : (
+            <div style={{...styles.profilePic, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#e0e0e0'}}>
+              {user.name ? user.name.charAt(0).toUpperCase() : '?'}
+            </div>
+          )}
           <h2>Welcome, {user.name}!</h2>
           <p>{user.email}</p>
           <button onClick={handleLogout} style={styles.logoutButton}>
@@ -119,7 +139,9 @@ const styles = {
     width: '100px',
     height: '100px',
     borderRadius: '50%',
-    marginBottom: '15px'
+    marginBottom: '15px',
+    objectFit: 'cover',
+    border: '2px solid #eaeaea'
   },
   logoutButton: {
     marginTop: '15px',
