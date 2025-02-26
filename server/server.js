@@ -29,10 +29,15 @@ async function verifyGoogleToken(token) {
 
 // Google authentication endpoint
 app.post('/api/auth/google', async (req, res) => {
+  console.log("req header", req.headers);
+  // console.log("req", req.body);
+  // console.log("res", res);
+  // debugger; // Add debugger statement here
   const { token } = req.body;
-  console.log("token", token);
+  // console.log("token", token);
   const payload = await verifyGoogleToken(token);
   console.log("payload", payload);
+  // debugger;
   if (!payload) {
     return res.status(400).json({ error: 'Invalid token' });
   }
@@ -59,7 +64,12 @@ app.post('/api/auth/google', async (req, res) => {
 
 // Verify JWT token middleware
 const verifyToken = (req, res, next) => {
+  // console.log("req", req);
+  // console.log("res", res);
+
   const token = req.headers.authorization?.split(' ')[1];
+  // print authorization
+  console.log("authorization", req.headers.authorization);
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });
   }
@@ -76,6 +86,10 @@ const verifyToken = (req, res, next) => {
 // Protected route example
 app.get('/api/user/profile', verifyToken, (req, res) => {
   res.json({ user: req.user });
+  userData = {user: req.user};
+  console.log("userData", userData);
+
+  // console.log('res.json', res.json({ user: req.user }))
 });
 
 const PORT = process.env.PORT || 5001;
